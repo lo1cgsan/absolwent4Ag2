@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'osoby.apps.OsobyConfig'
+    'osoby.apps.OsobyConfig',
+    'wiadomosci.apps.WiadomosciConfig',
 ]
 
 MIDDLEWARE = [
