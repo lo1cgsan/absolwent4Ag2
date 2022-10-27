@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 
-def index(request):
+def lista_absolwentow(request):
     return HttpResponse("<h1>Aplikacja osoby!</h1>")
 
 def about(request):
