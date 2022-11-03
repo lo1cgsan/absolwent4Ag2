@@ -70,6 +70,17 @@
   <section class="page-section clearfix">
     <div class="container">
       <div class="intro">
+
+        <div class="well well-sm bg-primary rounded">
+          {% if messages %}
+          <ul>
+            {% for komunikat in messages %}
+              <li>{{ komunikat|capfirst }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+
       {% block tresc %}{% endblock %}
       </div>
     </div>

@@ -2,10 +2,17 @@ from django.http import HttpResponse
 
 from django.shortcuts import render
 from osoby.forms import UserLoginForm
+from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.urls import reverse
 
+from osoby.models import Absolwent
 
 def lista_absolwentow(request):
-    return HttpResponse("<h1>Aplikacja osoby!</h1>")
+    absolwenci = Absolwent.objects.all()
+    kontekst = {'absolwenci': absolwenci}
+    return render(request, 'osoby/lista_absolwentow.html', kontekst)
 
 def about(request):
     return HttpResponse("<h1>Informacje o aplikacji</h1>")
@@ -14,7 +21,16 @@ def loguj_osobe(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
+            nazwa = form.cleaned_data['nazwa']
+            haslo = form.cleaned_data['haslo']
+            user = authenticate(request, username=nazwa, password=haslo)
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Zostałeś zalogowany!")
+                return redirect(reverse('osoby:lista'))
+            else:
+                messages.error(request, "Błędny login lub hasło!")
+
     else:
         form = UserLoginForm()
     kontekst = {'form': form}
