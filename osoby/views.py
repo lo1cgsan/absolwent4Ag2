@@ -35,3 +35,8 @@ def loguj_osobe(request):
         form = UserLoginForm()
     kontekst = {'form': form}
     return render(request, 'osoby/loguj_osobe.html', kontekst)
+
+def wyloguj_osobe(request):
+    logout(request)
+    messages.info(request, "Zostałeś wylogowany!")
+    return redirect(reverse('osoby:lista'))
