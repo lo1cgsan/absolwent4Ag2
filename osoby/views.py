@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 
 from django.shortcuts import render
-from osoby.forms import UserLoginForm
+from osoby.forms import UserLoginForm, UserCreateForm, UserEditForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from osoby.models import Absolwent
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 def lista_absolwentow(request):
     absolwenci = Absolwent.objects.all()
@@ -44,11 +45,26 @@ def wyloguj_osobe(request):
 
 def rejestruj_osobe(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreateForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Utworzono konto! Możesz się zalogować!")
             return redirect(reverse('osoby:loguj-osobe'))
     else:
-        form = UserCreationForm()
+        form = UserCreateForm()
     return render(request, 'osoby/rejestruj_osobe1.html', {'form': form})
+
+@login_required()
+def edytuj_osobe(request):
+    try:
+        a = Absolwent.objects.filter(user=request.user).first()
+    except Absolwent.DoesNotExist:
+        a = 0
+    print(a)
+    if request.method == 'POST':
+        pass
+    else:
+        if a:
+            a = a.klasa.id
+        form = UserEditForm(instance=request.user, initial={'klasa':a})
+    return render(request, 'osoby/edytuj_osobe1.html', {'form': form})
