@@ -62,7 +62,17 @@ def edytuj_osobe(request):
         a = 0
     print(a)
     if request.method == 'POST':
-        pass
+        form = UserEditForm(instance=request.user, data=request.POST)
+        if form.is_valid():
+            # print(form.cleaned_data['klasa'])
+            if a:
+                a.klasa = form.cleaned_data['klasa']
+                a.save()
+            else:
+                a = Absolwent.objects.create(user=request.user, klasa=form.cleaned_data['klasa'])
+            form.save()
+            messages.success(request, "Zaktualizowano dane użytkownika!")
+            return redirect(reverse('osoby:lista'))
     else:
         if a:
             a = a.klasa.id
