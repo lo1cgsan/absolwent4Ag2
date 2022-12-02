@@ -43,3 +43,8 @@ class UserEditForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'required': 'required', 'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'required': 'required', 'class': 'form-control'}),
         }
+
+class KlasaForm(forms.ModelForm):
+    class Meta:
+        model = Klasa
+        exclude = ('data_d',)
